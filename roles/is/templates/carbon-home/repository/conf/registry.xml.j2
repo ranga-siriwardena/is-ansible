@@ -31,6 +31,27 @@
         <dataSource>jdbc/WSO2CarbonDB</dataSource>
     </dbConfig>
 
+    <dbConfig name="sharedregistry">
+        <dataSource>jdbc/{{wso2_reg_db}}</dataSource>
+    </dbConfig>
+    <remoteInstance url="https://localhost:9443/registry">
+        <id>sharedregistry</id>
+        <dbConfig>sharedregistry</dbConfig>
+        <readOnly>false</readOnly>
+        <registryRoot>/</registryRoot>
+        <enableCache>true</enableCache>
+        <cacheId>jdbc:mysql://{{mysql_db_host}}:{{mysql_db_port}}/{{wso2_reg_db}}</cacheId>
+    </remoteInstance>
+    <mount path="/_system/config" overwrite="true">
+        <instanceId>sharedregistry</instanceId>
+        <targetPath>/_system/config</targetPath>
+    </mount>
+    <mount path="/_system/governance" overwrite="true">
+        <instanceId>sharedregistry</instanceId>
+        <targetPath>/_system/governance</targetPath>
+    </mount>
+
+
    <handler class="org.wso2.carbon.identity.entitlement.policy.finder.registry.RegistryPolicyHandler">
  <filter class="org.wso2.carbon.identity.entitlement.policy.finder.registry.RegistryPolicyMediaTypeMatcher">
  <property name="mediaType">application/xacml-policy+xml</property>

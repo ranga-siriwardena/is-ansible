@@ -14,17 +14,22 @@
 #  limitations under the License.
 #----------------------------------------------------------------------------
 ---
-  - name: Set rpm_setup_path
-    set_fact:
-      setup_path: "{{ rpm_setup_path }}"
-      java_home: '"/usr/lib64/wso2/wso2is/5.7.0/jdk/jdk1.8.0_192"'
-    when: ansible_os_family == "RedHat"
+#  - name: Set rpm_setup_path
+#    set_fact:
+#      setup_path: "{{ rpm_setup_path }}"
+#      java_home: '"/usr/lib64/wso2/wso2is/5.7.0/jdk/jdk1.8.0_192"'
+#    when: ansible_os_family == "RedHat"
 
-  - name: Set deb_setup_path
+#  - name: Set deb_setup_path
+#    set_fact:
+#      setup_path: "{{ deb_setup_path }}"
+#      java_home: '"/usr/lib/wso2/wso2is/5.7.0/jdk/jdk1.8.0_192"'
+#    when: ansible_os_family == "Debian"
+
+  - name: Set binary_setup_path
     set_fact:
-      setup_path: "{{ deb_setup_path }}"
-      java_home: '"/usr/lib/wso2/wso2is/5.7.0/jdk/jdk1.8.0_192"'
-    when: ansible_os_family == "Debian"
+      setup_path: "{{ binary_setup_path }}"
+#      java_home: '"/opt/java/jdk1.8.0_211"'
 
   - block:
     - name: Create group
@@ -43,96 +48,122 @@
         state: directory
         mode: 0755
 
-    - name: Copy the Debian package of WSO2 Identity Server
-      copy:
-        src: "{{ product_package_location }}/{{ product_archive_deb }}"
-        dest: "{{ product_path }}/{{product_archive_deb }}"
-        mode: u=rw,g=r,o=r
-      when: ansible_os_family == "Debian"
+    - name: Create WSO2 directory2
+      file:
+        path: "{{ setup_path }}/{{ product_name }}/{{ product_version }}"
+        state: directory
+        mode: 0755
 
-    - name: Copy the RPM package of WSO2 Identity Server
-      copy:
-        src: "{{ product_package_location  }}/{{ product_archive_rpm  }}"
-        dest: "{{ product_path  }}/{{ product_archive_rpm  }}"
-        mode: u=rw,g=r,o=r
-      when: ansible_os_family == "RedHat"
 
-    - name: Install a .deb package
-      apt:
-        deb: "{{ product_path  }}/{{ product_archive_deb  }}"
-      when: ansible_os_family == "Debian"
+#    - name: Copy the Debian package of WSO2 Identity Server
+#      copy:
+#        src: "{{ product_package_location }}/{{ product_archive_deb }}"
+#        dest: "{{ product_path }}/{{product_archive_deb }}"
+#        mode: u=rw,g=r,o=r
+#      when: ansible_os_family == "Debian"
 
-    - name: Install a .rpm package
-      yum:
-        name: "{{ product_path  }}/{{ product_archive_rpm  }}"
-        state: present
-      when: ansible_os_family == "RedHat"
+#    - name: Copy the RPM package of WSO2 Identity Server
+#      copy:
+#        src: "{{ product_package_location  }}/{{ product_archive_rpm  }}"
+#        dest: "{{ product_path  }}/{{ product_archive_rpm  }}"
+#        mode: u=rw,g=r,o=r
+#      when: ansible_os_family == "RedHat"
+
+#    - name: Install a .deb package
+#      apt:
+#        deb: "{{ product_path  }}/{{ product_archive_deb  }}"
+#      when: ansible_os_family == "Debian"
+
+#    - name: Install a .rpm package
+#      yum:
+#        name: "{{ product_path  }}/{{ product_archive_rpm  }}"
+#        state: present
+#      when: ansible_os_family == "RedHat"
+
+    - name: "Copy and unzip wso2 product binary"
+      unarchive: 
+         src: "files/{{ product_archive_binary  }}" 
+         dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}" 
+         remote_src: no
 
     - name: "Copy JDBC Driver"
       copy:
        src: "files/{{ jdbc_driver }}"
-       dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/repository/components/lib"
+       dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/{{product_home}}/repository/components/lib"
 
     - name: "Copy master-datasource.xml"
       template:
         src: "carbon-home/repository/conf/datasources/master-datasources.xml.j2"
-        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/repository/conf/datasources/master-datasources.xml"
+        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/{{product_home}}/repository/conf/datasources/master-datasources.xml"
 
     - name: "Copy identity.xml"
       template:
         src: "carbon-home/repository/conf/identity/identity.xml.j2"
-        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/repository/conf/identity/identity.xml"
+        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/{{product_home}}/repository/conf/identity/identity.xml"
 
     - name: "Copy carbon.xml"
       template:
         src: "carbon-home/repository/conf/carbon.xml.j2"
-        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/repository/conf/carbon.xml"
+        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/{{product_home}}/repository/conf/carbon.xml"
 
     - name: "Copy registry.xml"
       template:
         src: "carbon-home/repository/conf/registry.xml.j2"
-        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/repository/conf/registry.xml"
+        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/{{product_home}}/repository/conf/registry.xml"
 
     - name: "Copy axis2.xml"
       template:
         src: "carbon-home/repository/conf/axis2/axis2.xml.j2"
-        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/repository/conf/axis2/axis2.xml"
+        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/{{product_home}}/repository/conf/axis2/axis2.xml"
 
     - name: "Copy catalina-server.xml"
       template:
         src: "carbon-home/repository/conf/tomcat/catalina-server.xml.j2"
-        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/repository/conf/tomcat/catalina-server.xml"
+        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/{{product_home}}/repository/conf/tomcat/catalina-server.xml"
 
     - name: "Copy user-mgt.xml"
       template:
         src: "carbon-home/repository/conf/user-mgt.xml.j2"
-        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/repository/conf/user-mgt.xml"
+        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/{{product_home}}/repository/conf/user-mgt.xml"
       when: "(inventory_hostname in groups['is'])"
 
     - name: "Copy IsAnalytics-Publisher-wso2event-AuthenticationData.xml"
       template:
         src: "carbon-home/repository/deployment/server/eventpublishers/IsAnalytics-Publisher-wso2event-AuthenticationData.xml.j2"
-        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/repository/deployment/server/eventpublishers/IsAnalytics-Publisher-wso2event-AuthenticationData.xml"
+        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/{{product_home}}/repository/deployment/server/eventpublishers/IsAnalytics-Publisher-wso2event-AuthenticationData.xml"
 
     - name: "Copy IsAnalytics-Publisher-wso2event-RoleDataa.xml"
       template:
         src: "carbon-home/repository/deployment/server/eventpublishers/IsAnalytics-Publisher-wso2event-RoleData.xml.j2"
-        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/repository/deployment/server/eventpublishers/IsAnalytics-Publisher-wso2event-RoleData.xml"
+        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/{{product_home}}/repository/deployment/server/eventpublishers/IsAnalytics-Publisher-wso2event-RoleData.xml"
 
     - name: "Copy IsAnalytics-Publisher-wso2event-SessionData.xml"
       template:
         src: "carbon-home/repository/deployment/server/eventpublishers/IsAnalytics-Publisher-wso2event-SessionData.xml.j2"
-        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/repository/deployment/server/eventpublishers/IsAnalytics-Publisher-wso2event-SessionData.xml"
+        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/{{product_home}}/repository/deployment/server/eventpublishers/IsAnalytics-Publisher-wso2event-SessionData.xml"
 
     - name: "Copy IsAnalytics-Publisher-wso2event-UserData.xml"
       template:
         src: "carbon-home/repository/deployment/server/eventpublishers/IsAnalytics-Publisher-wso2event-UserData.xml.j2"
-        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/repository/deployment/server/eventpublishers/IsAnalytics-Publisher-wso2event-UserData.xml"
+        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/{{product_home}}/repository/deployment/server/eventpublishers/IsAnalytics-Publisher-wso2event-UserData.xml"
 
     - name: "Copy wso2server.sh"
       template:
         src: "carbon-home/bin/wso2server.sh.j2"
-        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/bin/wso2server.sh"
+        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/{{product_home}}/bin/wso2server.sh"
+
+    - name: "Copy claim-config.xml"
+      template:
+        src: "carbon-home/repository/conf/claim-config.xml.j2"
+        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/{{product_home}}/repository/conf/claim-config.xml"
+      when: "(inventory_hostname in groups['is'])"
+
+    - name: "Copy identity/identity-mgt.properties"
+      template:
+        src: "carbon-home/repository/conf/identity/identity-mgt.properties.j2"
+        dest: "{{ setup_path }}/{{ product_name }}/{{ product_version }}/{{product_home}}/repository/conf/identity/identity-mgt.properties"
+      when: "(inventory_hostname in groups['is'])"
+
 
 # Enable customization by uncommenting the following and adding the changes to the custom.yml
     # - import_tasks: custom.yml

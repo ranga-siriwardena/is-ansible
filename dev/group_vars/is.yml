@@ -16,32 +16,35 @@
 
 wso2_group: wso2
 wso2_user: wso2carbon
-deb_setup_path: /usr/lib/wso2
-rpm_setup_path: /usr/lib64/wso2
+#deb_setup_path: /usr/lib/wso2
+#rpm_setup_path: /usr/lib64/wso2
+binary_setup_path: /usr/lib/wso2
 product_name: wso2is
 product_version: 5.7.0
 product_path: /opt/wso2
+product_home: wso2is-5.7.0
 product_archive_deb: wso2is-linux-installer-x64-5.7.0.deb
 product_archive_rpm: wso2is-linux-installer-x64-5.7.0.rpm
+product_archive_binary: wso2is-5.7.0+1556375005604.full.zip
 product_package_location: files
-jdbc_driver: mysql-connector-java-5.1.45-bin.jar
+jdbc_driver: mysql-connector-java-5.1.47-bin.jar
 
 is_analytics_hostname: localhost
 
-wso2_reg_db_driver_class_name: org.h2.Driver
-wso2_reg_db_url: jdbc:h2:repository/database/WSO2CARBON_DB;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000
-wso2_reg_db_username: wso2carbon
-wso2_reg_db_password: wso2carbon
+# wso2_reg_db_driver_class_name: com.mysql.jdbc.Driver
+# wso2_reg_db_url: jdbc:h2:repository/database/WSO2CARBON_DB;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000
+# wso2_reg_db_username: wso2carbon
+# wso2_reg_db_password: wso2carbon
 
-wso2_user_db_driver_class_name: org.h2.Driver
-wso2_user_db_url: jdbc:h2:repository/database/WSO2CARBON_DB;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000
-wso2_user_db_username: wso2carbon
-wso2_user_db_password: wso2carbon
+# wso2_user_db_driver_class_name: org.h2.Driver
+# wso2_user_db_url: jdbc:h2:repository/database/WSO2CARBON_DB;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000
+# wso2_user_db_username: wso2carbon
+# wso2_user_db_password: wso2carbon
 
-wso2_consent_db_driver_class_name: org.h2.Driver
-wso2_identity_db_url: jdbc:h2:repository/database/WSO2CARBON_DB;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000
-wso2_identity_db_username: wso2carbon
-wso2_identity_db_password: wso2carbon
+# wso2_consent_db_driver_class_name: org.h2.Driver
+# wso2_identity_db_url: jdbc:h2:repository/database/WSO2CARBON_DB;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000
+# wso2_identity_db_username: wso2carbon
+# wso2_identity_db_password: wso2carbon
 
 # KeyStore which will be used for encrypting/decrypting passwords and other sensitive information.
 keystore_location: ${carbon.home}/repository/resources/security/wso2carbon.jks
@@ -54,6 +57,37 @@ keystore_key_password: wso2carbon
 truststore_location: ${carbon.home}/repository/resources/security/client-truststore.jks
 truststore_type: JKS
 truststore_password: wso2carbon
+
+# wso2server.sh
+java_home: '"/opt/java/jdk1.8.0_211"'
+java_mem_opts: '"-Xms256m -Xmx1024m"'
+
+#carbon.xml
+enable_email_username: 'true'
+
+# user-mgt.xml
+user_manager_admin_username: admin@wso2.com
+user_manager_admin_password: Int1@9
+username_java_script_regex: '^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$'
+username_java_regex: '^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$'
+
+# claim-config.xml
+claim_username_attribut_id: mail
+
+# identity/identity-mgt.properties
+use_hashed_username: 'true'
+ 
+# Datasource configuration
+mysql_db_host: 127.0.0.1
+mysql_db_port: 3306
+mysql_db_driver: com.mysql.jdbc.Driver
+mysql_db_max_active: 80
+mysql_db_user: root
+mysql_db_password: root
+
+wso2_reg_db: WSO2_REG_DB
+wso2_um_db: WSO2_UM_DB
+wso2_identity_db: WSO2_IDENTITY_DB
 
 # Add any new changes you want to add for the group/profile below.
 # If you add a new file under templates and parameterized the file, the values for those parameters should be added

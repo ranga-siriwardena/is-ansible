@@ -48,3 +48,13 @@ catalina_server_connector_http_accept_count: 200
 # catalina_server_connector_https_proxy_port: 443
 catalina_server_connector_https_max_threads: 250
 catalina_server_connector_https_accept_count: 200
+
+#Clustering 
+clustering_enable: "true"
+clustering_scheme: wka
+clustering_domain: wso2.is.domain
+clustering_local_member_host: 10.0.2.6
+clustering_local_member_port: 4000
+clustering_member_host: 10.0.2.15
+clustering_member_port: 4000
+

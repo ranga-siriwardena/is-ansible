@@ -1,13 +1,14 @@
 [is]
-is_1 ansible_host=[ip_address] ansible_user=[ssh_user]
+is_1 ansible_host=10.0.2.6 ansible_user=ranga
+is_2 ansible_host=10.0.2.15 ansible_user=ranga
 # Example
 # is_1 ansible_host=172.28.128.4 ansible_user=vagrant
 
-[is-analytics]
-is-analytics-dashboard_1 ansible_host=[ip_address] ansible_user=[ssh_user]
+#[is-analytics]
+#is-analytics-dashboard_1 ansible_host=10.0.2.6 ansible_user=ranga
 # Example
 # is-analytics-dashboard_1 ansible_host=172.28.128.4 ansible_user=vagrant
 
-is-analytics-worker_1 ansible_host=[ip_address] ansible_user=[ssh_user]
+#is-analytics-worker_1 ansible_host=10.0.2.6 ansible_user=ranga
 # Example
 # is-analytics-worker_1 ansible_host=172.28.128.4 ansible_user=vagrant
