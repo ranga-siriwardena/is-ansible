@@ -90,6 +90,20 @@ wso2_reg_db: WSO2_REG_DB
 wso2_um_db: WSO2_UM_DB
 wso2_identity_db: WSO2_IDENTITY_DB
 
+# axis2.xml clustering 
+clustering_enable: "true"
+clustering_scheme: aws
+clustering_domain: wso2.is.domain
+clustering_local_member_host: 127.0.0.1
+clustering_local_member_port: 5701
+clustering_aws_access_key: accessKey
+clustering_aws_secret_key: secretKey
+clustering_aws_security_group: a_group_name
+clustering_aws_region: us-east-1
+clustering_aws_tag_key: a_tag_key
+clustering_aws_tag_value: a_tag_value
+
+
 # Add any new changes you want to add for the group/profile below.
 # If you add a new file under templates and parameterized the file, the values for those parameters should be added
 # below.

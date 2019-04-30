@@ -678,6 +678,17 @@
         <parameter name="localMemberBindPort">4001</parameter>
         -->
 
+	<parameter name="accessKey">{{clustering_aws_access_key}}</parameter>
+	<parameter name="secretKey">{{clustering_aws_secret_key}}</parameter>
+	<parameter name="securityGroup">{{clustering_aws_security_group}}</parameter>
+ 
+	<!-- Make sure you do not add any zone values (e.g., a) to the region parameter -->
+	<parameter name="region">{{clustering_aws_region}}</parameter>
+ 
+      	<!-- If you are adding tags, they should be attached to the AWS instances -->
+	<parameter name="tagKey">{{clustering_aws_tag_key}}</parameter> 
+	<parameter name="tagValue">{{clustering_aws_tag_value}}</parameter> 
+
         <!--
         Properties specific to this member
         -->
@@ -702,17 +713,14 @@
            The list of static or well-known members. These entries will only be valid if the
            "membershipScheme" above is set to "wka"
         -->
+	<!--
         <members>
             <member>
-                <hostName>{{ clustering_local_member_host }}</hostName>
-                <port>{{ clustering_local_member_port }}</port>
+                <hostName>127.0.0.1</hostName>
+                <port>4000</port>
             </member>
-	    <member>
-                <hostName>{{ clustering_member_host }}</hostName>
-                <port>{{ clustering_member_port }}</port>
-            </member>
-
         </members>
+	-->
 
         <!--
         Enable the groupManagement entry if you need to run this node as a cluster manager.
