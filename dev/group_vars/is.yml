@@ -70,6 +70,7 @@ user_manager_admin_username: admin@wso2.com
 user_manager_admin_password: Int1@9
 username_java_script_regex: '^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$'
 username_java_regex: '^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$'
+user_manager_is_bulk_import_supported: 'true'
 
 # claim-config.xml
 claim_username_attribut_id: mail
